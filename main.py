@@ -4,30 +4,28 @@ from pydantic import BaseModel
 
 class Item(BaseModel):
     id: int
-    description: str
-    value: float
+    quantidade: int
+    descricao: str
+    valor: float
 
 app = FastAPI()
 
-@app.get("/")
-def read_root(user_agent: Optional[str] = Header(None)):
-    return {"Hello": "World", "user_agent": user_agent}
-
-
-@app.get("/cookie")
-def cookie(response: Response):
-    response.set_cookie(key="mycookie", value="123")
-    return {"cookie": True}
-
-@app.get("/get-cookie")
-def get_cookie(mycookie: Optional[str] = Cookie(None)):
-    return {"Cookie": mycookie}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, p: bool, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q, "p": p}
+banco = []
 
 @app.post("/item")
-def add_item(new_item: Item):
-    return new_item
+def add_item(item: Item):
+    banco.append(item)
+    return item
+
+@app.get("/item")
+def list_item():
+    return banco
+
+@app.get("/item/valor_total")
+def get_valor_total():
+    valor_total = sum([item.valor * item.quantidade for item in banco])
+
+    # for item in banco:
+    #     valor_total += item.valor * item.quantidade
+
+    return {"total_value": round(valor_total, 3)}
