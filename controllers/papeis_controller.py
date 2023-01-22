@@ -3,13 +3,11 @@ from models.papel import Papel
 
 router = APIRouter()
 
-banco = []
-
 @router.post("/")
-def add_item(item: Papel):
-    banco.append(item)
-    return item
+async def add_item(papel: Papel):
+    await papel.save()
+    return papel
 
 @router.get("/")
-def list_item():
-    return banco
+async def list_item():
+    return await Papel.objects.all()
