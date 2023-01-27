@@ -1,2 +1,8 @@
 /env
 /__pycache__
+/tests/.pytest_cache
+/tests/__pycache__
+/tests/api/__pycache__
+/tests/utils/__pycache__
+/tests/testedb.sqlite
+/db.sqlite
