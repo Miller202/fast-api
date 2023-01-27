@@ -6,3 +6,7 @@
 /tests/utils/__pycache__
 /tests/testedb.sqlite
 /db.sqlite
+/tests/unit/model/__pycache__
+/models/__pycache__
+models/__pycache__/papel.cpython-39.pyc
+models/__pycache__/papel.cpython-39.pyc
