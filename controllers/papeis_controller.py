@@ -1,6 +1,7 @@
+import ormar
 from fastapi import APIRouter, Response
 from models.papel import Papel
-import ormar
+from models.requests.patch_papel import PapelUpdate
 
 router = APIRouter()
 
@@ -18,6 +19,17 @@ async def get_papel(papel_id: int, response: Response):
     try:
         papel = await Papel.objects.get(id=papel_id)
         return papel
+    except ormar.exceptions.NoMatch:
+        response.status_code == 404
+        return {"mensagem": "Entidade não encontrada"}
+
+@router.patch("/{papel_id}")
+async def patch_papel(propriedades_atualizacao: PapelUpdate, papel_id: int, response: Response):
+    try:
+        papel_salvo = await Papel.objects.get(id=papel_id)
+        propriedades_atualizadas = propriedades_atualizacao.dict(exclude_unset=True)
+        await papel_salvo.update(**propriedades_atualizadas)
+        return papel_salvo
     except ormar.exceptions.NoMatch:
         response.status_code == 404
         return {"mensagem": "Entidade não encontrada"}

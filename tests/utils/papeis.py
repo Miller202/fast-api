@@ -3,7 +3,7 @@ def create_papel_valido():
         "id": 0,
         "nome": "string",
         "sigla": "PETR4",
-        "cnpj": "string"
+        "cnpj": "string",
     }
 
 def create_papel_invalido(campos_invalidos=['sigla']):
@@ -11,7 +11,7 @@ def create_papel_invalido(campos_invalidos=['sigla']):
         "id": 0,
         "nome": "string",
         "sigla": "PETR4",
-        "cnpj": "string"
+        "cnpj": "string",
     }
 
     if 'sigla' in campos_invalidos:
