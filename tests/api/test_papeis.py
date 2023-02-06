@@ -1,9 +1,11 @@
 from fastapi.testclient import TestClient
 from models.papel import Papel
 from tests.utils.papeis import create_papel_valido, create_papel_invalido
+
 import asyncio
 import pytest
 import ormar
+
 
 def test_cria_papel(client: TestClient) -> None:
     body = create_papel_valido()
@@ -12,11 +14,13 @@ def test_cria_papel(client: TestClient) -> None:
     assert response.status_code == 200
     assert content["cnpj"] == body["cnpj"]
 
+
 def test_cria_papel_com_sigla_invalida(client: TestClient) -> None:
     body = create_papel_invalido(['sigla'])
     response = client.post("/papeis/", json=body)
     content = response.json()
     assert response.status_code == 422
+
 
 def test_obtem_papel_por_id(client: TestClient) -> None:
     atributos = create_papel_valido()
@@ -30,12 +34,14 @@ def test_obtem_papel_por_id(client: TestClient) -> None:
     assert response.status_code == 200
     assert content["sigla"] == papel.sigla
 
+
 def test_obtem_papel_inexistente_por_id(client: TestClient) -> None:
     response = client.get(f"/papeis/1")
     content = response.json()
 
     assert response.status_code == 404
-    assert content["mensagem"] == "Entidade não encontrada"
+    assert content["detail"] == "Entidade não encontrada"
+
 
 def test_update_papel_existente(client: TestClient) -> None:
     atributos = create_papel_valido()
@@ -55,6 +61,7 @@ def test_update_papel_existente(client: TestClient) -> None:
     assert content["nome"] == novo_nome
     assert papel_atualizado.nome == novo_nome
 
+
 def test_update_papel_inexistente(client: TestClient) -> None:
     novo_nome = "Novo nome"
     atributos_para_atualizar = {"nome": novo_nome}
@@ -63,7 +70,8 @@ def test_update_papel_inexistente(client: TestClient) -> None:
     content = response.json()
 
     assert response.status_code == 404
-    assert content["mensagem"] == "Entidade não encontrada"
+    assert content["detail"] == "Entidade não encontrada"
+
 
 def test_delete_papel_existente(client: TestClient) -> None:
     atributos = create_papel_valido()
@@ -78,9 +86,10 @@ def test_delete_papel_existente(client: TestClient) -> None:
 
     assert response.status_code == 200
 
+
 def test_delete_papel_inexistente(client: TestClient) -> None:
     response = client.delete(f"/papeis/1")
     content = response.json()
 
     assert response.status_code == 404
-    assert content["mensagem"] == "Entidade não encontrada"
+    assert content["detail"] == "Entidade não encontrada"
